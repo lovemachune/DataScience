@@ -7,6 +7,16 @@ from bs4 import BeautifulSoup
 
 PTT_URL = 'https://www.ptt.cc'
 
+def check_format(url):
+    res = requests.get(url, cookies={'over18': '1'})
+    text = res.text.encode('utf-8')
+    soup = BeautifulSoup(text, 'html.parser')
+    divs = soup.find_all("span", class_ = "f2")
+    for div in divs:
+        if re.search("發信站", div.text) is not None:
+            return True
+    return False
+
 def crawl(url):
     all_data = open('all_articles.txt', 'wb+')
     popular_data = open('all_popular.txt', 'wb+')
@@ -18,13 +28,15 @@ def crawl(url):
         text = res.text.encode('utf-8')
         soup = BeautifulSoup(text, 'html.parser')
         divs = soup.find_all("div", "r-ent")
-        temp_url = PTT_URL + soup.find_all(class_ = 'btn wide')[2]['href']
         print(temp_url)
+        temp_url = PTT_URL + soup.find_all(class_ = 'btn wide')[2]['href']
         for div in divs:
             title_tag = div.find(class_ = 'title').find('a')
             if title_tag == None:
                 continue
             title = title_tag.string
+            if re.search("公告", title):
+                continue
             href = title_tag['href']
             date_tag = div.find(class_ = 'date')
             rate = div.find(class_ = 'nrec').string
@@ -36,11 +48,14 @@ def crawl(url):
             if month == 13:
                 flag = False
                 break
-            all_data.write(mydata.encode('utf-8'))
-            if rate == "爆":
-                popular_data.write(mydata.encode('utf-8'))
+            if True:#check_format(PTT_URL+href):
+                all_data.write(mydata.encode('utf-8'))
+                if rate == "爆":
+                    popular_data.write(mydata.encode('utf-8'))
+
     all_data.close()
     popular_data.close()
+
 def push(start_date, end_date):
     print(start_date)
     print(end_date)
