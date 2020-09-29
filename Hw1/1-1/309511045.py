@@ -157,15 +157,16 @@ def popular(start_date, end_date):
 
 
 def keyword_process(url, pic_urls):
-    url = 'https://www.ptt.cc/bbs/Beauty/M.1546272669.A.765.html'
+    url = 'https://www.ptt.cc/bbs/Beauty/M.1548662596.A.3D4.html'
     soup = connect(url)
     if soup is None:
         print("NO 發信站 : %s" % url)
         return
-    divs = soup.find_all('div')#, class_ = 'article-metaline')
-    for div in divs:
-        print(div)
-    
+    content = soup.find(id="main-content").text
+    content = content[:re.search('發信站', content).start()-1]
+    res = content.rindex('--')
+    content = content[:res]
+    print(content)
 
 def keyword(key, start_date, end_date):
     all_data = open('all_articles.txt', 'r', encoding='utf-8')
