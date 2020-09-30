@@ -156,9 +156,9 @@ def popular(start_date, end_date):
     p.close()
 
 
-def keyword_process(url, pic_urls):
-    url = 'https://www.ptt.cc/bbs/Beauty/M.1548662596.A.3D4.html'
+def keyword_process(key, url, pic_urls):
     soup = connect(url)
+    pattern = '^http.*(gif|png|jpe?g)$'
     if soup is None:
         print("NO 發信站 : %s" % url)
         return
@@ -166,7 +166,14 @@ def keyword_process(url, pic_urls):
     content = content[:re.search('發信站', content).start()-1]
     res = content.rindex('--')
     content = content[:res]
-    print(content)
+    if re.search(key, content) is not None:
+        print(url)
+        contents = soup.find_all('a')
+        for content in contents:
+            href = content['href']
+            if re.match(pattern, href) is not None:
+                pic_urls.append(href+'\n')
+
 
 def keyword(key, start_date, end_date):
     all_data = open('all_articles.txt', 'r', encoding='utf-8')
@@ -180,8 +187,11 @@ def keyword(key, start_date, end_date):
         if date > end_date:
             break
         if date >= start_date:
-            keyword_process(url, pic_urls)
-        break
+            keyword_process(key, url, pic_urls)
+    for pic_url in pic_urls:
+        keyword_data.write(pic_url)
+    all_data.close()
+    keyword_data.close()
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='PTT crawling')
