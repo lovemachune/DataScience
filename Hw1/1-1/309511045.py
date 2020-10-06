@@ -98,7 +98,7 @@ def push(start_date, end_date):
     for data in datas:
         mydata = data.split(",")
         date = int(mydata[0])
-        url = mydata[2].rstrip()
+        url = mydata[-1].rstrip()
         if date > end_date:
             break
         if date >= start_date:
@@ -143,7 +143,7 @@ def popular(start_date, end_date):
     for data in datas:
         mydata = data.split(",")
         date = int(mydata[0])
-        url = mydata[2].rstrip()
+        url = mydata[-1].rstrip()
         if date > end_date:
             break
         if date >= start_date:
@@ -183,7 +183,7 @@ def keyword(key, start_date, end_date):
     for data in datas:
         mydata = data.split(",")
         date = int(mydata[0])
-        url = mydata[2].rstrip()
+        url = mydata[-1].rstrip()
         if date > end_date:
             break
         if date >= start_date:
