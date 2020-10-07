@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*
 import sys
 import time
 import re
@@ -177,7 +178,7 @@ def keyword_process(key, url, pic_urls):
 
 def keyword(key, start_date, end_date):
     all_data = open('all_articles.txt', 'r', encoding='utf-8')
-    keyword_data = open(key+'[%d-%d].txt' % (start_date, end_date), 'w+')
+    keyword_data = open('keyword('+key+')'+'[%d-%d].txt' % (start_date, end_date), 'w+')
     datas = all_data.readlines()
     pic_urls = []
     for data in datas:
