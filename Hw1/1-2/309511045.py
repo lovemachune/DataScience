@@ -4,6 +4,7 @@ import re
 import requests
 import argparse
 from bs4 import BeautifulSoup
+<<<<<<< HEAD
 import cv2
 import tensorflow as tf
 from tensorflow import keras
@@ -11,6 +12,8 @@ from tensorflow.keras import layers
 from tensorflow.python.keras.applications.resnet import ResNet50
 from tensorflow.python.keras.models import Sequential
 from tensorflow.python.keras.layers import Activation, Dense
+=======
+>>>>>>> 699c3b2c47d48720c41943a19d04996aefa58987
 
 PTT_URL = 'https://www.ptt.cc'
 
