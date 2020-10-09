@@ -3,7 +3,8 @@ import time
 import re
 import requests
 import argparse
-from bs4 import BeautifulSoup
+import numpy as np
+#from bs4 import BeautifulSoup
 import cv2
 import tensorflow as tf
 from tensorflow import keras
@@ -132,11 +133,26 @@ def ugly():
                 index += 1
 
 def predict_push():
+    img_height = 180
+    img_width = 180
     model = tf.keras.models.load_model('./my_model')
     myfile = open('imgfilelistname.txt', 'r', encoding='utf-8')
+    output = open('classification.txt', 'w+')
     datas = myfile.readlines()
+    imgs = []
     for data in datas:
-        
+        img = cv2.imread(data.rstrip())
+        img = cv2.resize(img, (img_height, img_width))
+        imgs.append(img)
+    imgs = np.array(imgs)
+    predicts = model.predict(imgs)
+    for i, j in predicts:
+        if(i>j): #beauty
+            output.write('1')
+        else:
+            output.write('0')
+    output.close()
+    myfile.close()
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='PTT crawling')
